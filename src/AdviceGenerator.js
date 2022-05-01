@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
 export default function RatingState() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isFirstAdvice, setIsFirstAdvice] = useState(false);
-  const [advice, setAdvice] = useState({});
-
   useEffect(() => {
-    if (!isFirstAdvice) {
-      getAdvice();
-    }
-  });
+    getAdvice()
+  }, []); // Call the useEffect callback (an empty array) only when the component mounts
 
-  const adviceSubmit = () => {
-    setIsLoaded(false);
-    setTimeout(() => {
-      getAdvice();
-    },1000);
-  }
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [advice, setAdvice] = useState({});
 
   const getAdvice = () => {
     fetch('https://api.adviceslip.com/advice')
     .then(response => response.json())
     .then(result => {
       setIsLoaded(true);
-      setIsFirstAdvice(true);
       setAdvice(result.slip);
     });
+  }
+
+  const adviceSubmit = () => {
+    setIsLoaded(false);
+    setTimeout(() => {
+      getAdvice();
+    },1000);
   }
 
   return (
